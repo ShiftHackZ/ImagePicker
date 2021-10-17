@@ -2,6 +2,8 @@
 
 Android library that can be used as quick solution to ImagePicker feature implementation.
 
+[![](https://jitpack.io/v/ShiftHackZ/ImagePicker.svg)](https://jitpack.io/#ShiftHackZ/ImagePicker)
+
 ## Features
 - Permission handle requests
 - Camera photo picker
@@ -13,13 +15,20 @@ Android library that can be used as quick solution to ImagePicker feature implem
 1. In project-level gradle add new maven repository:
 
 <pre>
-
+allprojects {
+    repositories {
+        ...
+        maven { url 'https://jitpack.io' }
+    }
+}
 </pre>
 
 2. In app-level gradle add new implementation:
 
 <pre>
-implementation 'com.shz.imagepicker:imagepicker:1.0'
+dependencies {
+    implementation 'com.github.ShiftHackZ:ImagePicker:v1.0'
+}
 </pre>
 
 3. In order to receive images, implement ImagePickerCallback in your Fragment/Activity or as object:
