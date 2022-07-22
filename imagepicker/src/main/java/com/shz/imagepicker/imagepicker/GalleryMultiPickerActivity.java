@@ -48,7 +48,7 @@ public class GalleryMultiPickerActivity extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_REQUEST_GALLERY) {
-            if (data != null && data.getData() != null) {
+            if (data != null) {
                 ArrayList<File> files = new ArrayList<>();
 
                 /*if (data.getData() != null) {
