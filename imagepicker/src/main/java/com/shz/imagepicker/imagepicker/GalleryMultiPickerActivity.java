@@ -92,12 +92,18 @@ public class GalleryMultiPickerActivity extends Activity {
     }
 
     private void startGalleryPicker() {
-        Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//        Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
+//            galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+//        }
+//        galleryIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, GALLERY_IMAGE_MIME);
+//        startActivityForResult(galleryIntent, IMAGE_REQUEST_GALLERY);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        }
-        galleryIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, GALLERY_IMAGE_MIME);
-        startActivityForResult(galleryIntent, IMAGE_REQUEST_GALLERY);
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*"); //allows any image file type. Change * to specific extension to limit it
+//**The following line is the important one!
+        intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        startActivityForResult(Intent.createChooser(intent, "Select Pictures"), IMAGE_REQUEST_GALLERY); //SELECT_PICTURES is simply a global int used to check the calling intent in onActivityResult
     }
 }
