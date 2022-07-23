@@ -92,8 +92,9 @@ public class GalleryMultiPickerActivity extends Activity {
     }
 
     private void startGalleryPicker() {
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        if (Build.VERSION.SDK_INT >= 18) {
+        Intent galleryIntent = new Intent(Intent.ACTION_GET_CONTENT, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
             galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         }
         galleryIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, GALLERY_IMAGE_MIME);
