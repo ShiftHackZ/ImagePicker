@@ -51,14 +51,14 @@ public class GalleryMultiPickerActivity extends Activity {
             if (data != null) {
                 ArrayList<File> files = new ArrayList<>();
 
-                /*if (data.getData() != null) {
+                if (data.getData() != null) {
                     Log.d("MultiPicker", "data: " + data.getData().toString());
                     String filename = ImagePath.getImagePathFromInputStreamUri(this, data.getData());
                     File file = new File(filename);
                     if (file.exists()) {
                         files.add(file);
                     }
-                }*/
+                }
                 if (data.getClipData() != null) {
                     ClipData clipData = data.getClipData();
 
