@@ -59,6 +59,7 @@ public class GalleryMultiPickerActivity extends Activity {
                         files.add(file);
                     }
                 }
+                
                 if (data.getClipData() != null) {
                     ClipData clipData = data.getClipData();
 
