@@ -50,7 +50,7 @@ public class GallerySinglePickerActivity extends Activity {
                 Log.d("SinglePicker", "data: " + data.getData().toString());
                 File file = new File(filename);
                 if (file.exists()) {
-                    
+
                     try{
                         fileOrientationHandler.rotateAndReWriteImageFile(file);
                     }catch (IOException e){
