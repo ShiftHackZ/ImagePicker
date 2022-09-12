@@ -1,21 +1,17 @@
 package com.shz.imagepicker.imagepickerapp;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.shz.imagepicker.imagepicker.ImagePicker;
 import com.shz.imagepicker.imagepicker.ImagePickerCallback;
-
-import java.io.File;
-import java.util.List;
+import com.shz.imagepicker.imagepicker.PickerResult;
 
 public class MainActivity extends AppCompatActivity implements ImagePickerCallback {
 
@@ -28,6 +24,12 @@ public class MainActivity extends AppCompatActivity implements ImagePickerCallba
         setContentView(R.layout.activity_main);
         mResultImage = (ImageView) findViewById(R.id.iv_result);
         mResultContainer = (LinearLayout) findViewById(R.id.ll_container);
+
+        findViewById(R.id.btn_gallery).setOnClickListener((v) -> onGalleryClick());
+        findViewById(R.id.btn_gallery_multiple).setOnClickListener((v) -> onGalleryMultipleClick());
+        findViewById(R.id.btn_camera).setOnClickListener((v) -> onCameraClick());
+        findViewById(R.id.btn_generic).setOnClickListener((v) -> onGenericClick());
+        findViewById(R.id.btn_generic_multiple).setOnClickListener((v) -> onGenericMultipleClick());
     }
 
     @Override
@@ -36,22 +38,22 @@ public class MainActivity extends AppCompatActivity implements ImagePickerCallba
     }
 
     @Override
-    public void onImagesSelected(List<File> files) {
-        if (files.size() > 0) {
-            if (files.size() == 1) {
-                Glide.with(this)
-                        .load(files.get(0))
+    public void onImagePickerResult(@NonNull PickerResult result) {
+        if (result instanceof PickerResult.Single) {
+            Glide.with(this)
+                        .load(((PickerResult.Single) result).getImage().getFile())
                         .into(mResultImage);
 
-                mResultContainer.setVisibility(View.GONE);
-                mResultImage.setVisibility(View.VISIBLE);
-            } else {
-                mResultContainer.removeAllViews();
-                for (int i = 0; i < files.size(); i++) {
+            mResultContainer.setVisibility(View.GONE);
+            mResultImage.setVisibility(View.VISIBLE);
+        }
+        if (result instanceof PickerResult.Multiple) {
+            mResultContainer.removeAllViews();
+                for (int i = 0; i < ((PickerResult.Multiple) result).getImages().size(); i++) {
                     ImageView imageView = new ImageView(this);
 
                     Glide.with(this)
-                            .load(files.get(i))
+                            .load(((PickerResult.Multiple) result).getImages().get(i).getFile())
                             .into(imageView);
 
                     mResultContainer.addView(imageView);
@@ -60,46 +62,49 @@ public class MainActivity extends AppCompatActivity implements ImagePickerCallba
                 }
                 mResultContainer.setVisibility(View.VISIBLE);
                 mResultImage.setVisibility(View.GONE);
-            }
         }
     }
 
-    public void onCameraClick(View v) {
-        new ImagePicker.Builder(this, this)
+    public void onCameraClick() {
+        getImagePicker()
                 .useCamera(true)
                 .build()
-                .start();
+                .launch(this);
     }
 
-    public void onGalleryMultipleClick(View v) {
-        new ImagePicker.Builder(this, this)
+    public void onGalleryMultipleClick() {
+        getImagePicker()
                 .useGallery(true)
-                .useMultiSelection(true)
+                .multipleSelection(true)
                 .build()
-                .start();
+                .launch(this);
     }
 
-    public void onGalleryClick(View v) {
-        new ImagePicker.Builder(this, this)
+    public void onGalleryClick() {
+        getImagePicker()
                 .useGallery(true)
                 .build()
-                .start();
+                .launch(this);
     }
 
-    public void onGenericMultipleClick(View v) {
-        new ImagePicker.Builder(this, this)
-                .useGallery(true)
-                .useCamera(true)
-                .useMultiSelection(true)
-                .build()
-                .start();
-    }
-
-    public void onGenericClick(View v) {
-        new ImagePicker.Builder(this, this)
+    public void onGenericMultipleClick() {
+        getImagePicker()
                 .useGallery(true)
                 .useCamera(true)
+                .multipleSelection(true)
                 .build()
-                .start();
+                .launch(this);
+    }
+
+    public void onGenericClick() {
+        getImagePicker()
+                .useGallery(true)
+                .useCamera(true)
+                .build()
+                .launch(this);
+    }
+
+    private ImagePicker.Builder getImagePicker() {
+        return new ImagePicker.Builder(this.getPackageName() + ".provider", this);
     }
 }

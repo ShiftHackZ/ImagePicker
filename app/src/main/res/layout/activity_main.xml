@@ -43,7 +43,6 @@
             android:background="#E16666"
             android:clickable="true"
             android:focusable="true"
-            android:onClick="onGalleryClick"
             android:text="GALLERY" />
 
 
@@ -59,7 +58,6 @@
             android:background="#E16666"
             android:clickable="true"
             android:focusable="true"
-            android:onClick="onGalleryMultipleClick"
             android:text="GALLERY MULTI SELECTION" />
 
         <TextView
@@ -74,7 +72,6 @@
             android:background="#E16666"
             android:clickable="true"
             android:focusable="true"
-            android:onClick="onCameraClick"
             android:text="CAMERA" />
 
         <TextView
@@ -89,7 +86,6 @@
             android:background="#E16666"
             android:clickable="true"
             android:focusable="true"
-            android:onClick="onGenericClick"
             android:text="GENERIC PICKER [SINGLE]" />
 
         <TextView

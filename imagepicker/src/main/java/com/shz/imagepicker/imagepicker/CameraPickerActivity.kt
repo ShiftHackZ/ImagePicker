@@ -1,97 +1,105 @@
-package com.shz.imagepicker.imagepicker;
+package com.shz.imagepicker.imagepicker
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
+import android.Manifest
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
+import android.os.Bundle
+import android.provider.MediaStore
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import com.shz.imagepicker.imagepicker.ImagePath.getCaptureImageResultUri
+import com.shz.imagepicker.imagepicker.ImagePath.getNormalizedUri
+import com.shz.imagepicker.imagepicker.ImagePath.getCaptureImageOutputUri
+import java.io.File
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.provider.MediaStore;
+class CameraPickerActivity : AppCompatActivity() {
 
-import java.io.File;
-import java.util.ArrayList;
+    private var filename: String = ""
 
-public class CameraPickerActivity extends Activity {
+    private val cameraLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            getCaptureImageResultUri(this, result.data, filename)
+                ?.let { uri -> getNormalizedUri(this, uri) }
+                ?.path
+                ?.let(::File)
+                ?.let { file -> PickerImage(PickerSource.CAMERA, file) }
+                ?.let(PickerResult::Single)
+                ?.let(callback::onImagePickerResult)
+        }
+        finish()
+    }
 
-    public static ImagePickerCallback mCallback;
-
-    private static final int PERMISSION_REQUEST_CAMERA = 54560;
-    private static final int IMAGE_REQUEST_CAMERA = 54561;
-
-    private static final String FILE_PROVIDER_PREFIX = ".provider";
-
-    private String mFilename;
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == PERMISSION_REQUEST_CAMERA) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startCameraPicker();
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startCameraPicker()
             } else {
-                finish();
+                finish()
             }
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_REQUEST_CAMERA) {
-            ArrayList<File> files = new ArrayList<>();
-            Uri uri = ImagePath.getCaptureImageResultUri(this, data, mFilename);
-            Uri uriFile = ImagePath.getNormalizedUri(this, uri);
-            File file = new File(uriFile.getPath());
-            files.add(file);
-            mCallback.onImagesSelected(files);
-        }
-        finish();
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        checkCameraPermission()
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        checkCameraPermission();
-    }
-
-    private void checkCameraPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_DENIED) {
+    private fun checkCameraPermission() {
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.CAMERA
+            ) == PackageManager.PERMISSION_DENIED
+        ) {
             ActivityCompat.requestPermissions(
-                    this,
-                    new String[] { Manifest.permission.CAMERA },
-                    PERMISSION_REQUEST_CAMERA
-            );
+                this, arrayOf(Manifest.permission.CAMERA),
+                PERMISSION_REQUEST_CAMERA
+            )
         } else {
-            startCameraPicker();
+            startCameraPicker()
         }
     }
 
-    private void startCameraPicker() {
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        mFilename = String.valueOf(System.nanoTime());
-        Uri uri = ImagePath.getCaptureImageOutputUri(this, mFilename);
-        if (uri != null) {
-            File file = new File(uri.getPath());
+    private fun startCameraPicker() {
+        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        filename = System.nanoTime().toString()
+        val uri = getCaptureImageOutputUri(this, filename)
+        if (filename.isNotEmpty()) uri?.path?.let { path ->
+            val file = File(path)
             if (Build.VERSION.SDK_INT >= 24) {
                 cameraIntent.putExtra(
-                        MediaStore.EXTRA_OUTPUT,
-                        FileProvider.getUriForFile(
-                                this,
-                                this.getPackageName() + FILE_PROVIDER_PREFIX,
-                                file
-                        )
-                );
-                cameraIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    MediaStore.EXTRA_OUTPUT,
+                    FileProvider.getUriForFile(
+                        this,
+                        authority,
+                        file
+                    )
+                )
+                cameraIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             } else {
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
             }
-            startActivityForResult(cameraIntent, IMAGE_REQUEST_CAMERA);
+            cameraLauncher.launch(cameraIntent)
         }
+    }
+
+    companion object {
+        private const val PERMISSION_REQUEST_CAMERA = 54560
+
+        @JvmField
+        internal var callback: ImagePickerCallback = ImagePickerCallback { }
+        internal var authority: String = ""
     }
 }

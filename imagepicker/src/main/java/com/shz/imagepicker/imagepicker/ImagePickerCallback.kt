@@ -1,8 +1,5 @@
-package com.shz.imagepicker.imagepicker;
+package com.shz.imagepicker.imagepicker
 
-import java.io.File;
-import java.util.List;
-
-public interface ImagePickerCallback {
-    void onImagesSelected(List<File> files);
+fun interface ImagePickerCallback {
+    fun onImagePickerResult(result: PickerResult)
 }

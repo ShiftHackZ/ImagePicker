@@ -1,102 +1,77 @@
-package com.shz.imagepicker.imagepicker;
+package com.shz.imagepicker.imagepicker
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.ClipData;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.provider.MediaStore;
-import android.util.Log;
+import android.app.Activity
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
+import android.os.Bundle
+import android.provider.MediaStore
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
+import com.shz.imagepicker.imagepicker.ImagePath.getImagePathFromInputStreamUri
+import java.io.File
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
+class GalleryMultiPickerActivity : AppCompatActivity() {
 
-import java.io.File;
-import java.util.ArrayList;
-
-public class GalleryMultiPickerActivity extends Activity {
-
-    public static ImagePickerCallback mCallback;
-
-    private static final int PERMISSION_REQUEST_READ_STORAGE = 54564;
-    private static final int IMAGE_REQUEST_GALLERY = 54565;
-
-    private static final String GALLERY_IMAGE_MIME = "image/jpeg";
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == PERMISSION_REQUEST_READ_STORAGE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startGalleryPicker();
-            } else {
-                finish();
-            }
-        }
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        checkGalleryPermission();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_REQUEST_GALLERY) {
-            if (data != null && data.getData() != null) {
-                ArrayList<File> files = new ArrayList<>();
-
-                /*if (data.getData() != null) {
-                    Log.d("MultiPicker", "data: " + data.getData().toString());
-                    String filename = ImagePath.getImagePathFromInputStreamUri(this, data.getData());
-                    File file = new File(filename);
-                    if (file.exists()) {
-                        files.add(file);
-                    }
-                }*/
-                if (data.getClipData() != null) {
-                    ClipData clipData = data.getClipData();
-
-                    for (int i = 0; i < clipData.getItemCount(); i++) {
-                        ClipData.Item item = clipData.getItemAt(i);
-                        String filename = ImagePath.getImagePathFromInputStreamUri(this, item.getUri());
-                        File file = new File(filename);
-                        if (file.exists()) {
-                            files.add(file);
-                        }
-                    }
+    private val galleryLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val output = arrayListOf<PickerImage>()
+            result.data?.clipData?.let { clipData ->
+                for (i in 0 until clipData.itemCount) {
+                    getImagePathFromInputStreamUri(this, clipData.getItemAt(i).uri)
+                        ?.let(::File)
+                        ?.takeIf(File::exists)
+                        ?.let { file -> PickerImage(PickerSource.GALLERY_MULTIPLE, file) }
+                        ?.let(output::add)
                 }
+            }
+            when (output.size) {
+                0 -> null
+                1 -> PickerResult.Single(output.first())
+                else -> PickerResult.Multiple(output)
+            }?.let(callback::onImagePickerResult)
+        }
+        finish()
+    }
 
-                mCallback.onImagesSelected(files);
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSION_CHECK_REQUEST) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startGalleryPicker()
+            } else {
+                finish()
             }
         }
-        finish();
     }
 
-    private void checkGalleryPermission() {
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED
-                || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(
-                    this,
-                    new String[] { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE },
-                    PERMISSION_REQUEST_READ_STORAGE
-            );
-        } else {
-            startGalleryPicker();
-        }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        checkGalleryPermission(::startGalleryPicker)
     }
 
-    private void startGalleryPicker() {
-        Intent galleryIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        if (Build.VERSION.SDK_INT >= 18) {
-            galleryIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-        }
-        galleryIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, GALLERY_IMAGE_MIME);
-        startActivityForResult(galleryIntent, IMAGE_REQUEST_GALLERY);
+    private fun startGalleryPicker() {
+        galleryLauncher.launch(
+            Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI).apply {
+                if (Build.VERSION.SDK_INT >= 18) putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+                setDataAndType(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    GALLERY_IMAGE_MIME
+                )
+            }
+        )
+    }
+
+    companion object {
+        private const val GALLERY_IMAGE_MIME = "image/jpeg"
+
+        @JvmField
+        internal var callback: ImagePickerCallback = ImagePickerCallback {  }
     }
 }

@@ -1,66 +1,55 @@
-package com.shz.imagepicker.imagepicker;
+package com.shz.imagepicker.imagepicker
 
-import android.annotation.SuppressLint;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.LinearLayout;
+import android.app.Dialog
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.view.Window
+import android.widget.LinearLayout
+import androidx.fragment.app.DialogFragment
 
-@SuppressLint("ValidFragment")
-public class ImagePickerDialog extends DialogFragment {
+class ImagePickerDialog(private val listener: ImagePickerDialogListener) : DialogFragment() {
 
-    public interface ImagePickerDialogListener {
-        void onCamera();
-        void onGallery();
+    interface ImagePickerDialogListener {
+        fun onCamera()
+        fun onGallery()
     }
 
-    private ImagePickerDialogListener mListener;
-
-    public ImagePickerDialog(ImagePickerDialogListener listener) {
-        super();
-        this.mListener = listener;
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+        val dialog = super.onCreateDialog(savedInstanceState)
+        dialog.window?.requestFeature(Window.FEATURE_NO_TITLE)
+        return dialog
     }
 
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        Dialog dialog = super.onCreateDialog(savedInstanceState);
-        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        return dialog;
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Dialog dialog = getDialog();
+    override fun onStart() {
+        super.onStart()
+        val dialog = dialog
         if (dialog != null) {
             //dialog.getWindow().setLayout(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
-            WindowManager.LayoutParams params = dialog.getWindow().getAttributes();
+            val params = dialog.window!!.attributes
             //params.horizontalMargin = 0.01f;
-            dialog.getWindow().setAttributes(params);
-
-            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+            dialog.window!!.attributes = params
+            dialog.window!!.setBackgroundDrawable(ColorDrawable(Color.WHITE))
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.layout_image_picker, container, false);
-        ((LinearLayout) rootView.findViewById(R.id.btn_camera)).setOnClickListener(v -> {
-            mListener.onCamera();
-            dismissAllowingStateLoss();
-        });
-        ((LinearLayout) rootView.findViewById(R.id.btn_gallery)).setOnClickListener(v -> {
-            mListener.onGallery();
-            dismissAllowingStateLoss();
-        });
-        return rootView;
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val rootView = inflater.inflate(R.layout.layout_image_picker, container, false)
+        (rootView.findViewById<View>(R.id.btn_camera) as LinearLayout).setOnClickListener {
+            listener.onCamera()
+            dismissAllowingStateLoss()
+        }
+        (rootView.findViewById<View>(R.id.btn_gallery) as LinearLayout).setOnClickListener {
+            listener.onGallery()
+            dismissAllowingStateLoss()
+        }
+        return rootView
     }
 }
