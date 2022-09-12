@@ -16,7 +16,10 @@ import android.util.Log;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.shz.imagepicker.imagepicker.util.FileOrientationHandler;
+
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
 
@@ -28,6 +31,7 @@ public class GalleryMultiPickerActivity extends Activity {
     private static final int IMAGE_REQUEST_GALLERY = 1;
 
     private static final String GALLERY_IMAGE_MIME = "image/jpeg";
+    private FileOrientationHandler fileOrientationHandler = new FileOrientationHandler();
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -53,17 +57,16 @@ public class GalleryMultiPickerActivity extends Activity {
         if (resultCode == Activity.RESULT_OK && requestCode == IMAGE_REQUEST_GALLERY) {
 
 
-
             if (data != null) {
                 ArrayList<File> files = new ArrayList<>();
 
 
-                if(data.getExtras() != null){
+                if (data.getExtras() != null) {
                     ArrayList<Parcelable> fileUris = data.getExtras().getParcelableArrayList("selectedItems");
 
-                    for(Parcelable uri : fileUris){
-                        if(uri instanceof Uri){
-                            files.add(new File( getRealPathFromURI((Uri) uri) ) );
+                    for (Parcelable uri : fileUris) {
+                        if (uri instanceof Uri) {
+                            files.add(new File(getRealPathFromURI((Uri) uri)));
                         }
 
                     }
@@ -93,15 +96,26 @@ public class GalleryMultiPickerActivity extends Activity {
                     }
                 }
 
+
+                try {
+                    for (File file :
+                            files) {
+                        fileOrientationHandler.rotateAndReWriteImageFile(file);
+                    }
+                } catch (IOException e) {
+                    Log.d(this.getClass().getSimpleName(), "Error rotating image " + e.getLocalizedMessage());
+                }
+
+
                 mCallback.onImagesSelected(files);
             }
         }
         finish();
     }
 
-    public String getRealPathFromURI (Uri contentUri) {
+    public String getRealPathFromURI(Uri contentUri) {
         String path = null;
-        String[] proj = { MediaStore.MediaColumns.DATA };
+        String[] proj = {MediaStore.MediaColumns.DATA};
         Cursor cursor = getContentResolver().query(contentUri, proj, null, null, null);
         if (cursor.moveToFirst()) {
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
@@ -116,7 +130,7 @@ public class GalleryMultiPickerActivity extends Activity {
                 || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(
                     this,
-                    new String[] { Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE },
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     PERMISSION_REQUEST_READ_STORAGE
             );
         } else {
@@ -135,6 +149,6 @@ public class GalleryMultiPickerActivity extends Activity {
 
         //galleryIntent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, GALLERY_IMAGE_MIME);
         startActivityForResult(galleryIntent, IMAGE_REQUEST_GALLERY);
-        
+
     }
 }
