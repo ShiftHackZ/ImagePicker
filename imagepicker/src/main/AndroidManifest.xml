@@ -9,13 +9,18 @@
 
     <application>
         <activity
-            android:name=".GalleryMultiPickerActivity" />
+            android:name=".activity.nativegallery.GalleryMultiPickerNativeActivity"
+            android:theme="@style/ImagePicker.Theme.Transparent" />
         <activity
-            android:name=".GallerySinglePickerActivity"
-            android:theme="@style/Theme.Transparent" />
+            android:name=".activity.nativegallery.GallerySinglePickerActivity"
+            android:theme="@style/ImagePicker.Theme.Transparent" />
         <activity
-            android:name=".CameraPickerActivity"
-            android:theme="@style/Theme.Transparent" />
+            android:name=".activity.camera.CameraPickerActivity"
+            android:theme="@style/ImagePicker.Theme.Transparent" />
+        <activity
+            android:name=".activity.dialog.DialogLauncherActivity"
+            android:theme="@style/ImagePicker.Theme.Transparent" />
+        <activity
+            android:name=".activity.customgallery.GalleryPickerCustomActivity" />
     </application>
-
 </manifest>
