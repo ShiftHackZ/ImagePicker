@@ -6,7 +6,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import java.io.File
 
-fun sortImagesByFolder(files: List<File>): Map<File, List<File>> {
+/*fun sortImagesByFolder(files: List<File>): Map<File, List<File>> {
     val resultMap = mutableMapOf<File, MutableList<File>>()
     for (file in files) {
         (!resultMap.containsKey(file.parentFile)).let { resultMap.put(file.parentFile, mutableListOf()) }
@@ -16,12 +16,10 @@ fun sortImagesByFolder(files: List<File>): Map<File, List<File>> {
 }
 
 fun getImagesFromFolder(context: Context, folder: String): List<File> {
-
     val selection = MediaStore.Images.Media.DATA + " LIKE ?"
-
     return queryUri(context, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, selection, arrayOf("%$folder/%"))
         .use { it?.getResultsFromCursor() ?: listOf() }
-}
+}*/
 
 fun getAllImages(context: Context): List<File> {
     return queryUri(context, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, null, null)
@@ -40,12 +38,9 @@ private fun queryUri(context: Context, uri: Uri, selection: String?, selectionAr
 
 private fun Cursor.getResultsFromCursor(): List<File> {
     val results = mutableListOf<File>()
-
     while (this.moveToNext()) {
         results.add(File(this.getString(this.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA))))
     }
-
-
     return results
 }
 

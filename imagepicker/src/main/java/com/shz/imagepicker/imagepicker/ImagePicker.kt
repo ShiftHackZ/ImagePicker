@@ -8,6 +8,14 @@ import com.shz.imagepicker.imagepicker.exception.NothingToLaunchException
 import com.shz.imagepicker.imagepicker.model.GallerySelector
 import com.shz.imagepicker.imagepicker.model.PickedResult
 
+/**
+ * Main **ImagePicker** SDK class.
+ * Contains configuration models and main business logic of.
+ *
+ * @see ImagePicker.Builder
+ *
+ * @author ShiftHackZ (Dmitriy Moroz)
+ */
 class ImagePicker private constructor(
     private val authority: String,
     private val callback: ImagePickerCallback,
@@ -19,6 +27,16 @@ class ImagePicker private constructor(
     private val gallerySelector: GallerySelector,
 ) {
 
+    /**
+     * Checks for access Camera or Media permissions, then
+     * launches **ImagePicker** according to defined configuration.
+     *
+     * Possible use cases:
+     * - When only Builder.useCamera(true) launches Camera Picker;
+     * - When only Builder.useGallery(true)
+     *
+     * @see ImagePicker.Builder
+     */
     fun launch(context: Context) = with(ImagePickerLauncher(context)) {
         when {
             useCamera && !useGallery -> launchCameraPicker(authority, callback)

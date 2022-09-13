@@ -9,7 +9,7 @@ import com.shz.imagepicker.imagepicker.core.ImagePickerActivity
 import com.shz.imagepicker.imagepicker.model.PickedImage
 import com.shz.imagepicker.imagepicker.model.PickedResult
 import com.shz.imagepicker.imagepicker.model.PickedSource
-import com.shz.imagepicker.imagepicker.utils.checkGalleryPermission
+import com.shz.imagepicker.imagepicker.utils.checkGalleryNativePermission
 import com.shz.imagepicker.imagepicker.utils.getImagePathFromInputStreamUri
 import java.io.File
 
@@ -19,7 +19,7 @@ internal class GalleryMultiPickerNativeActivity : ImagePickerActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        checkGalleryPermission(requestCode, ::startPicker)
+        checkGalleryNativePermission(requestCode, ::startPicker)
     }
 
     override fun deliverResult(intent: Intent?) {

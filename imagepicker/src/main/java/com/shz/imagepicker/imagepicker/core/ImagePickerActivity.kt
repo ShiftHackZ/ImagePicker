@@ -20,15 +20,13 @@ internal abstract class ImagePickerActivity : AppCompatActivity() {
         finish()
     }
 
-    open fun deliverResult(intent: Intent?) {
-        ImagePicker.debugLog("deliverResult -> URI: ${intent?.data}")
-    }
+    abstract fun startPicker()
+
+    open fun deliverResult(intent: Intent?) = Unit
 
     open fun handleMissingPermissions() {
         finish()
     }
-
-    abstract fun startPicker()
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -37,7 +35,7 @@ internal abstract class ImagePickerActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == this.requestCode) {
-            if (grantResults.isNotEmpty() && !grantResults.any { it == PackageManager.PERMISSION_DENIED }) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 startPicker()
             } else {
                 handleMissingPermissions()

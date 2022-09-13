@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity(), ImagePickerCallback {
             imagePicker.useGallery()
                 .useCamera()
                 .multipleSelection()
-                .gallerySelector(GallerySelector.CUSTOM)
+                .gallerySelector(GallerySelector.NATIVE)
                 .build()
                 .launch(this)
         }

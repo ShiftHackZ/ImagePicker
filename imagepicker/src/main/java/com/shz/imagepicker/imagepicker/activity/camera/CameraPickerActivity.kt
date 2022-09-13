@@ -28,7 +28,6 @@ internal class CameraPickerActivity : ImagePickerActivity() {
     }
 
     override fun deliverResult(intent: Intent?) {
-        super.deliverResult(intent)
         getCaptureImageResultUri(this, intent, filename)
             ?.let { uri -> getNormalizedUri(this, uri) }
             ?.path

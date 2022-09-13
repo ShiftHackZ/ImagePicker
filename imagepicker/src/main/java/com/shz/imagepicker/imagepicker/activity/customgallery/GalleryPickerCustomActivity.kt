@@ -18,7 +18,7 @@ import com.shz.imagepicker.imagepicker.core.ImagePickerActivity
 import com.shz.imagepicker.imagepicker.model.PickedImage
 import com.shz.imagepicker.imagepicker.model.PickedResult
 import com.shz.imagepicker.imagepicker.model.PickedSource
-import com.shz.imagepicker.imagepicker.utils.checkGalleryPermission
+import com.shz.imagepicker.imagepicker.utils.checkGalleryNativePermission
 import com.shz.imagepicker.imagepicker.utils.getAllImages
 import java.io.File
 
@@ -55,7 +55,7 @@ internal class GalleryPickerCustomActivity : ImagePickerActivity() {
             )
         }
 
-        checkGalleryPermission(requestCode, ::startPicker)
+        checkGalleryNativePermission(requestCode, ::startPicker)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {
@@ -80,12 +80,10 @@ internal class GalleryPickerCustomActivity : ImagePickerActivity() {
                     }
                 }
             }
-            ImagePicker.debugLog("Files: $files")
         }
     }
 
     private fun onSelectionChanged(count: Int) {
-        ImagePicker.debugLog("onSelectionChanged: $count")
         findViewById<TextView>(R.id.tv_select_cont)?.text = "$count"
         findViewById<Button>(R.id.btn_select)?.isEnabled = count >= min
     }
