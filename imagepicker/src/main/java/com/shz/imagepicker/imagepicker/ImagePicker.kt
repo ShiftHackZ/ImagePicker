@@ -88,6 +88,7 @@ class ImagePicker private constructor(
          * @see ImagePicker
          *
          * @return instance of [ImagePicker]
+         * @throws IllegalArgumentException on incorrect minimumSelectionCount, maximumSelectionCount values.
          */
         fun build(): ImagePicker {
             require(minimumSelectionCount >= 1) {
