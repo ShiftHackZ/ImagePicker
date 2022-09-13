@@ -98,7 +98,7 @@ val imagePicker = ImagePicker.Builder(this.packageName + ".provider", this)
 ```
 
 
-5. Finally, launch your ImagePicker:
+7. Finally, launch your ImagePicker:
 
 ```kotlin
 imagePicker.launch(context)
