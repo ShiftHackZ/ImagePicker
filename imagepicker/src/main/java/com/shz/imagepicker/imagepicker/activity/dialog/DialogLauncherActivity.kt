@@ -7,7 +7,7 @@ import com.shz.imagepicker.imagepicker.ImagePicker
 import com.shz.imagepicker.imagepicker.ImagePickerCallback
 import com.shz.imagepicker.imagepicker.ImagePickerLauncher
 import com.shz.imagepicker.imagepicker.exception.UnableLaunchDialogException
-import com.shz.imagepicker.imagepicker.model.GallerySelector
+import com.shz.imagepicker.imagepicker.model.GalleryPicker
 import java.io.Serializable
 
 internal class DialogLauncherActivity : AppCompatActivity(), ImagePickerDialog.Listener {
@@ -43,7 +43,7 @@ internal class DialogLauncherActivity : AppCompatActivity(), ImagePickerDialog.L
         ImagePickerLauncher(this).launchGalleryPicker(
             callback = callback,
             multipleSelection = payload?.multipleSelection ?: false,
-            gallerySelector = payload?.gallerySelector ?: GallerySelector.NATIVE,
+            galleryPicker = payload?.galleryPicker ?: GalleryPicker.NATIVE,
             minimum = payload?.minimum ?: 1,
             maximum = payload?.maximum ?: 10,
         )
@@ -59,7 +59,7 @@ internal class DialogLauncherActivity : AppCompatActivity(), ImagePickerDialog.L
         val multipleSelection: Boolean,
         val minimum: Int,
         val maximum: Int,
-        val gallerySelector: GallerySelector,
+        val galleryPicker: GalleryPicker,
     ) : Serializable
 
     companion object {

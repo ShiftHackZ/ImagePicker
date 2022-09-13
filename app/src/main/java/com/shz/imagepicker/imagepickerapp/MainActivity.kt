@@ -7,7 +7,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
 import com.shz.imagepicker.imagepicker.ImagePicker
 import com.shz.imagepicker.imagepicker.ImagePickerCallback
-import com.shz.imagepicker.imagepicker.model.GallerySelector
+import com.shz.imagepicker.imagepicker.model.GalleryPicker
 import com.shz.imagepicker.imagepicker.model.PickedResult
 import com.shz.imagepicker.imagepickerapp.databinding.ActivityMainBinding
 
@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity(), ImagePickerCallback {
         binding.btnGalCustomSingle.setOnClickListener {
             imagePicker
                 .useGallery()
-                .gallerySelector(GallerySelector.CUSTOM)
+                .galleryPicker(GalleryPicker.CUSTOM)
                 .build()
                 .launch(this)
         }
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity(), ImagePickerCallback {
             imagePicker
                 .useGallery()
                 .multipleSelection()
-                .gallerySelector(GallerySelector.CUSTOM)
+                .galleryPicker(GalleryPicker.CUSTOM)
                 .build()
                 .launch(this)
         }
@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity(), ImagePickerCallback {
             imagePicker.useGallery()
                 .useCamera()
                 .multipleSelection()
-                .gallerySelector(GallerySelector.NATIVE)
+                .galleryPicker(GalleryPicker.NATIVE)
                 .build()
                 .launch(this)
         }

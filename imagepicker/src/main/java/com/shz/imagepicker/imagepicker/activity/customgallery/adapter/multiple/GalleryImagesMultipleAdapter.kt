@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.shz.imagepicker.imagepicker.R
 import java.io.File
 
-class GalleryImagesMultipleAdapter(
+internal class GalleryImagesMultipleAdapter(
     private val images: ArrayList<File> = arrayListOf(),
     private val maximum: Int = Int.MAX_VALUE,
     private val onSelectionChanged: (List<File>) -> Unit = {},

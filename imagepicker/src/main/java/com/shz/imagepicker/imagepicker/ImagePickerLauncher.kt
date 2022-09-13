@@ -7,8 +7,7 @@ import com.shz.imagepicker.imagepicker.activity.customgallery.GalleryPickerCusto
 import com.shz.imagepicker.imagepicker.activity.dialog.DialogLauncherActivity
 import com.shz.imagepicker.imagepicker.activity.nativegallery.GalleryMultiPickerNativeActivity
 import com.shz.imagepicker.imagepicker.activity.nativegallery.GallerySinglePickerActivity
-import com.shz.imagepicker.imagepicker.model.GallerySelector
-import kotlin.math.max
+import com.shz.imagepicker.imagepicker.model.GalleryPicker
 
 internal class ImagePickerLauncher(private val context: Context) {
 
@@ -27,16 +26,16 @@ internal class ImagePickerLauncher(private val context: Context) {
         multipleSelection: Boolean,
         minimum: Int,
         maximum: Int,
-        gallerySelector: GallerySelector,
+        galleryPicker: GalleryPicker,
     ) {
         ImagePicker.debugLog("[Launcher] launchGalleryPicker")
-        when (gallerySelector) {
-            GallerySelector.NATIVE -> if (multipleSelection) {
+        when (galleryPicker) {
+            GalleryPicker.NATIVE -> if (multipleSelection) {
                 launchMultipleSelectionGalleryNative(callback)
             } else {
                 launchSingleSelectionGallery(callback)
             }
-            GallerySelector.CUSTOM -> {
+            GalleryPicker.CUSTOM -> {
                 launchMultipleSelectionGalleryCustom(callback, multipleSelection, minimum, maximum)
             }
         }
@@ -48,7 +47,7 @@ internal class ImagePickerLauncher(private val context: Context) {
         multipleSelection: Boolean,
         minimum: Int,
         maximum: Int,
-        gallerySelector: GallerySelector,
+        galleryPicker: GalleryPicker,
     ) {
         ImagePicker.debugLog("[Launcher] launchDialog")
         DialogLauncherActivity.callback = callback
@@ -60,7 +59,7 @@ internal class ImagePickerLauncher(private val context: Context) {
                     multipleSelection,
                     minimum,
                     maximum,
-                    gallerySelector,
+                    galleryPicker,
                 )
             )
         })
