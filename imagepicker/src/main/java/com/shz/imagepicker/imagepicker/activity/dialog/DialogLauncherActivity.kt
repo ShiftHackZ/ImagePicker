@@ -3,9 +3,9 @@ package com.shz.imagepicker.imagepicker.activity.dialog
 import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.shz.imagepicker.imagepicker.ImagePicker
-import com.shz.imagepicker.imagepicker.ImagePickerCallback
+import com.shz.imagepicker.imagepicker.*
 import com.shz.imagepicker.imagepicker.ImagePickerLauncher
+import com.shz.imagepicker.imagepicker.defaultImagePickerLoadDelegate
 import com.shz.imagepicker.imagepicker.exception.UnableLaunchDialogException
 import com.shz.imagepicker.imagepicker.model.GalleryPicker
 import java.io.Serializable
@@ -17,7 +17,7 @@ internal class DialogLauncherActivity : AppCompatActivity(), ImagePickerDialog.L
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        this.payload = if (Build.VERSION.SDK_INT >= 33) {
+        this.payload = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.getSerializableExtra(BUNDLE_PAYLOAD, Payload::class.java)
         } else {
             intent.getSerializableExtra(BUNDLE_PAYLOAD) as Payload?
@@ -42,6 +42,7 @@ internal class DialogLauncherActivity : AppCompatActivity(), ImagePickerDialog.L
     override fun launchGallery() {
         ImagePickerLauncher(this).launchGalleryPicker(
             callback = callback,
+            delegate = loadDelegate,
             multipleSelection = payload?.multipleSelection ?: false,
             galleryPicker = payload?.galleryPicker ?: GalleryPicker.NATIVE,
             minimum = payload?.minimum ?: 1,
@@ -69,5 +70,8 @@ internal class DialogLauncherActivity : AppCompatActivity(), ImagePickerDialog.L
 
         @JvmField
         internal var callback: ImagePickerCallback = ImagePickerCallback {  }
+
+        @JvmField
+        internal var loadDelegate: ImagePickerLoadDelegate = defaultImagePickerLoadDelegate
     }
 }

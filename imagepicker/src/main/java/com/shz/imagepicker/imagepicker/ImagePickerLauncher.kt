@@ -23,6 +23,7 @@ internal class ImagePickerLauncher(private val context: Context) {
 
     fun launchGalleryPicker(
         callback: ImagePickerCallback,
+        delegate: ImagePickerLoadDelegate,
         multipleSelection: Boolean,
         minimum: Int,
         maximum: Int,
@@ -36,7 +37,13 @@ internal class ImagePickerLauncher(private val context: Context) {
                 launchSingleSelectionGallery(callback)
             }
             GalleryPicker.CUSTOM -> {
-                launchMultipleSelectionGalleryCustom(callback, multipleSelection, minimum, maximum)
+                launchMultipleSelectionGalleryCustom(
+                    callback,
+                    delegate,
+                    multipleSelection,
+                    minimum,
+                    maximum
+                )
             }
         }
     }
@@ -44,6 +51,7 @@ internal class ImagePickerLauncher(private val context: Context) {
     fun launchDialog(
         authority: String,
         callback: ImagePickerCallback,
+        delegate: ImagePickerLoadDelegate,
         multipleSelection: Boolean,
         minimum: Int,
         maximum: Int,
@@ -51,6 +59,7 @@ internal class ImagePickerLauncher(private val context: Context) {
     ) {
         ImagePicker.debugLog("[Launcher] launchDialog")
         DialogLauncherActivity.callback = callback
+        DialogLauncherActivity.loadDelegate = delegate
         context.startActivity(Intent(context, DialogLauncherActivity::class.java).apply {
             putExtra(
                 DialogLauncherActivity.BUNDLE_PAYLOAD,
@@ -79,11 +88,13 @@ internal class ImagePickerLauncher(private val context: Context) {
 
     private fun launchMultipleSelectionGalleryCustom(
         callback: ImagePickerCallback,
+        delegate: ImagePickerLoadDelegate,
         multipleSelection: Boolean,
         min: Int,
         max: Int,
     ) {
         ImagePicker.debugLog("[Launcher] launchMultipleSelectionGalleryCustom")
+        GalleryPickerCustomActivity.loadDelegate = delegate
         GalleryPickerCustomActivity.callback = callback
         context.startActivity(Intent(context, GalleryPickerCustomActivity::class.java).apply {
             putExtra(GalleryPickerCustomActivity.BUNDLE_MULTI_SELECTION, multipleSelection)

@@ -4,7 +4,6 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#ff0000"
     tools:ignore="ContentDescription">
 
     <com.shz.imagepicker.imagepicker.activity.customgallery.view.GalleryImageView

@@ -2,14 +2,18 @@ package com.shz.imagepicker.imagepickerapp
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.GridLayoutManager
+import com.bumptech.glide.Glide
 import com.shz.imagepicker.imagepicker.ImagePicker
 import com.shz.imagepicker.imagepicker.ImagePickerCallback
+import com.shz.imagepicker.imagepicker.ImagePickerLoadDelegate
 import com.shz.imagepicker.imagepicker.model.GalleryPicker
 import com.shz.imagepicker.imagepicker.model.PickedResult
 import com.shz.imagepicker.imagepickerapp.databinding.ActivityMainBinding
+import java.io.File
 
 class MainActivity : AppCompatActivity(), ImagePickerCallback {
 
@@ -44,6 +48,11 @@ class MainActivity : AppCompatActivity(), ImagePickerCallback {
             imagePicker
                 .useGallery()
                 .galleryPicker(GalleryPicker.CUSTOM)
+                .loadDelegate { imageView, file ->
+                    Glide.with(this)
+                        .load(file)
+                        .into(imageView)
+                }
                 .build()
                 .launch(this)
         }
@@ -52,6 +61,11 @@ class MainActivity : AppCompatActivity(), ImagePickerCallback {
                 .useGallery()
                 .multipleSelection()
                 .galleryPicker(GalleryPicker.CUSTOM)
+                .loadDelegate { imageView, file ->
+//                    Glide.with(this)
+//                        .load(file)
+//                        .into(imageView)
+                }
                 .build()
                 .launch(this)
         }

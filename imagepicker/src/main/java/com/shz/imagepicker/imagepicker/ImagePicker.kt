@@ -4,9 +4,11 @@ package com.shz.imagepicker.imagepicker
 
 import android.content.Context
 import android.util.Log
+import android.widget.ImageView
 import com.shz.imagepicker.imagepicker.exception.NothingToLaunchException
 import com.shz.imagepicker.imagepicker.model.GalleryPicker
 import com.shz.imagepicker.imagepicker.model.PickedResult
+import java.io.File
 
 /**
  * Main **ImagePicker** SDK class.
@@ -25,6 +27,7 @@ class ImagePicker private constructor(
     private val minimumSelectionCount: Int,
     private val maximumSelectionCount: Int,
     private val galleryPicker: GalleryPicker,
+    private val loadDelegate: ImagePickerLoadDelegate,
 ) {
 
     /**
@@ -46,6 +49,7 @@ class ImagePicker private constructor(
             useCamera && !useGallery -> launchCameraPicker(authority, callback)
             !useCamera && useGallery -> launchGalleryPicker(
                 callback,
+                loadDelegate,
                 multipleSelection,
                 minimumSelectionCount,
                 maximumSelectionCount,
@@ -54,6 +58,7 @@ class ImagePicker private constructor(
             useCamera && useGallery -> launchDialog(
                 authority,
                 callback,
+                loadDelegate,
                 multipleSelection,
                 minimumSelectionCount,
                 maximumSelectionCount,
@@ -81,6 +86,7 @@ class ImagePicker private constructor(
         private var minimumSelectionCount: Int = 1
         private var maximumSelectionCount: Int = Int.MAX_VALUE
         private var galleryPicker: GalleryPicker = GalleryPicker.NATIVE
+        private var loadDelegate: ImagePickerLoadDelegate = defaultImagePickerLoadDelegate
 
         /**
          * Must be called after desired parameters were passed to receive [ImagePicker] instance.
@@ -106,6 +112,7 @@ class ImagePicker private constructor(
                 minimumSelectionCount,
                 maximumSelectionCount,
                 galleryPicker,
+                loadDelegate,
             )
         }
 
@@ -183,6 +190,14 @@ class ImagePicker private constructor(
          */
         fun galleryPicker(galleryPicker: GalleryPicker) = apply {
             this.galleryPicker = galleryPicker
+        }
+
+        fun loadDelegate(loadDelegate: ImagePickerLoadDelegate) = apply {
+            this.loadDelegate = loadDelegate
+        }
+
+        fun loadDelegate(loadDelegate: (ImageView, File) -> Unit) = apply {
+            this.loadDelegate = ImagePickerLoadDelegate { iv, file -> loadDelegate(iv, file) }
         }
 
         companion object {

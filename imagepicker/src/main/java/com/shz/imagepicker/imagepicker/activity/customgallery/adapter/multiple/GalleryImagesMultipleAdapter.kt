@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageView
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.shz.imagepicker.imagepicker.R
 import java.io.File
@@ -55,6 +56,25 @@ internal class GalleryImagesMultipleAdapter(
             }
             view.findViewById<ImageView>(R.id.image).setImageBitmap(BitmapFactory.decodeFile(item.path))
             view.findViewById<CheckBox>(R.id.checkbox).isChecked = selected
+        }
+    }
+
+    data class Model(
+        val file: File,
+        val isSelected: Boolean,
+    )
+
+    companion object {
+        private val diff = object : DiffUtil.ItemCallback<File>() {
+            override fun areItemsTheSame(
+                oldItem: File,
+                newItem: File
+            ): Boolean = oldItem.path == newItem.path
+
+            override fun areContentsTheSame(oldItem: File, newItem: File): Boolean {
+                TODO("Not yet implemented")
+            }
+
         }
     }
 }

@@ -9,12 +9,11 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.shz.imagepicker.imagepicker.ImagePicker
-import com.shz.imagepicker.imagepicker.ImagePickerCallback
-import com.shz.imagepicker.imagepicker.R
+import com.shz.imagepicker.imagepicker.*
 import com.shz.imagepicker.imagepicker.activity.customgallery.adapter.multiple.GalleryImagesMultipleAdapter
 import com.shz.imagepicker.imagepicker.activity.customgallery.adapter.single.GalleryImagesSingleAdapter
 import com.shz.imagepicker.imagepicker.core.ImagePickerActivity
+import com.shz.imagepicker.imagepicker.defaultImagePickerLoadDelegate
 import com.shz.imagepicker.imagepicker.model.PickedImage
 import com.shz.imagepicker.imagepicker.model.PickedResult
 import com.shz.imagepicker.imagepicker.model.PickedSource
@@ -71,8 +70,10 @@ internal class GalleryPickerCustomActivity : ImagePickerActivity() {
             findViewById<RecyclerView>(R.id.rv_images).apply {
                 layoutManager = GridLayoutManager(context, 3)
                 adapter = if (!multipleSelection) {
-                    GalleryImagesSingleAdapter(files) { selectedFile ->
+                    GalleryImagesSingleAdapter(loadDelegate) { selectedFile ->
                         handleSelection(listOf(selectedFile))
+                    }.apply {
+                        submitList(files)
                     }
                 } else {
                     GalleryImagesMultipleAdapter(ArrayList(files), max) { selectedFiles ->
@@ -104,5 +105,8 @@ internal class GalleryPickerCustomActivity : ImagePickerActivity() {
 
         @JvmField
         internal var callback: ImagePickerCallback = ImagePickerCallback { }
+
+        @JvmField
+        internal var loadDelegate: ImagePickerLoadDelegate = defaultImagePickerLoadDelegate
     }
 }
