@@ -6,7 +6,7 @@ plugins {
 
 def libraryGroupId = 'com.shz.imagepicker'
 def libraryArtifactId = 'imagepicker'
-def libraryVersion = '1.0'
+def libraryVersion = '1.0.1'
 
 
 android {
