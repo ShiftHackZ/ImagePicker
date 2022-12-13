@@ -19,7 +19,7 @@ import com.shz.imagepicker.imagepicker.exception.FeatureNotSupportedException
 import com.shz.imagepicker.imagepicker.model.PickedImage
 import com.shz.imagepicker.imagepicker.model.PickedResult
 import com.shz.imagepicker.imagepicker.model.PickedSource
-import com.shz.imagepicker.imagepicker.utils.checkGalleryNativePermission
+import com.shz.imagepicker.imagepicker.utils.checkReadExternalStoragePermission
 import com.shz.imagepicker.imagepicker.utils.getAllImages
 import java.io.File
 
@@ -66,7 +66,7 @@ internal class GalleryPickerCustomActivity : ImagePickerActivity() {
             )
         }
 
-        checkGalleryNativePermission(requestCode, ::startPicker)
+        checkReadExternalStoragePermission(requestCode, ::startPicker)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean = when (item.itemId) {

@@ -9,7 +9,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
 @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.TIRAMISU, lambda = 2)
-fun Activity.checkGalleryNativePermission(request: Int, action: () -> Unit) {
+fun Activity.checkReadExternalStoragePermission(request: Int, action: () -> Unit) {
     if (Build.VERSION.SDK_INT >= 33) action()
     else {
         if (ContextCompat.checkSelfPermission(
