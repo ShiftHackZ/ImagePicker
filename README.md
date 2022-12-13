@@ -9,64 +9,100 @@ Android library that can be used as quick solution to ImagePicker feature implem
 - Camera photo picker
 - Gallery single photo picker
 - Gallery multiple photo picker
+- Custom gallery picker, supports multiple selection (for old non-AOSP Android ROMs that does not support multiple selection intent)
 
 ## Implementation
 
 1. In project-level gradle add new maven repository:
 
-<pre>
+```groovy
 allprojects {
     repositories {
-        ...
         maven { url 'https://jitpack.io' }
     }
 }
-</pre>
+```
 
 2. In app-level gradle add new implementation:
 
-<pre>
+```groovy
 dependencies {
-    implementation 'com.github.ShiftHackZ:ImagePicker:v1.0'
+    implementation 'com.github.ShiftHackZ:ImagePicker:v2.0'
 }
-</pre>
+```
 
-3. In order to receive images, implement ImagePickerCallback in your Fragment/Activity or as object:
+3. Create file `provider_path.xml` in `res/xml` folder:
 
-<pre>
-public class MainActivity extends AppCompatActivity implements ImagePickerCallback {
-    ...
-    @Override
-    public void onImagesSelected(List<File> files) {
-        // Do whatever you want with list of files
-        for (int i = 0; i < files.size(); i++) {
-            // As example you can process each file inside for-cycle
-        }        
-    }    
-    ...
+```xml
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <external-path name="media" path="." />
+    <external-path name="external_files" path="."/>
+</paths>
+```
+
+4. In your `AndroidManifest.xml` add the file provider inside the `<application` tag:
+
+```xml
+<provider 
+    android:name="androidx.core.content.FileProvider"
+    android:authorities="${applicationId}.provider" 
+    android:exported="false"
+    android:grantUriPermissions="true">
+    <meta-data 
+        android:name="android.support.FILE_PROVIDER_PATHS"
+        android:resource="@xml/provider_path" />
+</provider>
+```
+
+5. In order to receive images, implement `ImagePickerCallback` in your Fragment/Activity or as object:
+
+```kotlin
+class MainActivity : AppCompatActivity(), ImagePickerCallback {
+
+    override fun onImagePickerResult(result: PickedResult) {
+        when (result) {
+            PickedResult.Empty -> {
+                // No file was selected, noting to do
+            }
+            is PickedResult.Error -> {
+                val throwable = result.throwable
+                // Some error happened, handle this throwable
+            }
+            is PickedResult.Multiple -> {
+                val pickedImages = result.images
+                val files = pickedImages.map { it.file }
+                // Selected multiple images, do whatever you want with files
+            }
+            is PickedResult.Single -> {
+                val pickedImage = result.image
+                val file = pickedImage.file
+                // Selected one image, do whatever you want with file
+            }
+        }
+    }
 }
-</pre>
+```
 
-4. Create an instance of ImagePicker using ImagePicker.Builder(), which require 2 mandatory params: current Activity and ImagePickerCallback:
+6. Create an instance of ImagePicker using ImagePicker.Builder(), which require 2 mandatory params: current Activity and ImagePickerCallback:
 
-<pre>
-ImagePicker imagePicker = new ImagePicker.Builder(activity, callback)
-    .useGallery(true)
-    .useCamera(true)
-    .useMultiSelection(true)
-    .build();
-</pre>
+```kotlin
+val imagePicker = ImagePicker.Builder(this.packageName + ".provider", this)
+    .useGallery(true)                           // Use gallery picker if true
+    .useCamera(true)                            // Use camera picker if true
+    .multipleSelection()                        // Allow multiple selection in gallery picker
+    .minimumSelectionCount(2)                   // Defines min count of GallerySelector.CUSTOM multiple selection gallery picker
+    .maximumSelectionCount(3)                   // Defines max count of GallerySelector.CUSTOM multiple selection gallery picker
+    .gallerySelector(GallerySelector.CUSTOM)    // Available values: GallerySelector.NATIVE, GallerySelector.CUSTOM
+    .build()
+```
 
-List of Builder methods:
-- useGallery(boolean)           // Pass 'true' if you want to enable gallery picker
-- useMultiSelection(boolean)    // Pass 'true' if you need gallery picker to support multiple photo selection
-- useCamera(boolean)            // Pass 'true' if you want to enable camera picker
 
-5. Finally, launch your ImagePicker:
+7. Finally, launch your ImagePicker:
 
-<pre>
-imagePicker.start();
-</pre>
+```kotlin
+imagePicker.launch(context)
+```
 
 ## Credits
 - Developer: Dmitriy Moroz 
