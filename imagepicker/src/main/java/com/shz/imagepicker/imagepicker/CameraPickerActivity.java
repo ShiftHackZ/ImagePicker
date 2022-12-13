@@ -12,8 +12,12 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
+
+import com.shz.imagepicker.imagepicker.util.FileOrientationHandler;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class CameraPickerActivity extends Activity {
@@ -26,6 +30,7 @@ public class CameraPickerActivity extends Activity {
     private static final String FILE_PROVIDER_PREFIX = ".provider";
 
     private String mFilename;
+    private FileOrientationHandler fileOrientationHandler = new FileOrientationHandler();
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -47,6 +52,13 @@ public class CameraPickerActivity extends Activity {
             Uri uri = ImagePath.getCaptureImageResultUri(this, data, mFilename);
             Uri uriFile = ImagePath.getNormalizedUri(this, uri);
             File file = new File(uriFile.getPath());
+
+            try{
+                fileOrientationHandler.rotateAndReWriteImageFile(file);
+            }catch (IOException e){
+                Log.d(this.getClass().getSimpleName(),"Error rotation image "+e.getLocalizedMessage());
+            }
+
             files.add(file);
             mCallback.onImagesSelected(files);
         }
@@ -94,4 +106,7 @@ public class CameraPickerActivity extends Activity {
             startActivityForResult(cameraIntent, IMAGE_REQUEST_CAMERA);
         }
     }
+
+
+
 }

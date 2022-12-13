@@ -11,7 +11,10 @@ import android.util.Log;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.shz.imagepicker.imagepicker.util.FileOrientationHandler;
+
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class GallerySinglePickerActivity extends Activity {
@@ -22,6 +25,8 @@ public class GallerySinglePickerActivity extends Activity {
     private static final int IMAGE_REQUEST_GALLERY = 54563;
 
     private static final String GALLERY_IMAGE_MIME = "image/jpeg";
+    private FileOrientationHandler fileOrientationHandler = new FileOrientationHandler();
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -45,6 +50,13 @@ public class GallerySinglePickerActivity extends Activity {
                 Log.d("SinglePicker", "data: " + data.getData().toString());
                 File file = new File(filename);
                 if (file.exists()) {
+
+                    try{
+                        fileOrientationHandler.rotateAndReWriteImageFile(file);
+                    }catch (IOException e){
+                        Log.d(this.getClass().getSimpleName(),"Error rotation image "+e.getLocalizedMessage());
+                    }
+
                     files.add(file);
                     mCallback.onImagesSelected(files);
                 }
