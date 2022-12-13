@@ -28,6 +28,7 @@ internal class GallerySinglePickerActivity : ImagePickerActivity() {
             ?.let { uri -> getImagePathFromInputStreamUri(this, uri) }
             ?.let(::File)
             ?.takeIf(File::exists)
+            ?.applyConditionalRotation()
             ?.let { file -> PickedImage(PickedSource.GALLERY_SINGLE, file) }
             ?.let(PickedResult::Single)
             ?.let(callback::onImagePickerResult)

@@ -92,8 +92,18 @@ internal class GalleryPickerCustomActivity : ImagePickerActivity() {
     private fun handleSelection(list: List<File>) {
         when (list.size) {
             0 -> PickedResult.Empty
-            1 -> PickedResult.Single(PickedImage(PickedSource.GALLERY_CUSTOM, list.first()))
-            else -> PickedResult.Multiple(list.map { PickedImage(PickedSource.GALLERY_CUSTOM, it) })
+            1 -> PickedResult.Single(
+                PickedImage(
+                    PickedSource.GALLERY_CUSTOM,
+                    list.first().applyConditionalRotation(),
+                )
+            )
+            else -> PickedResult.Multiple(list.map { file ->
+                PickedImage(
+                    PickedSource.GALLERY_CUSTOM,
+                    file.applyConditionalRotation(),
+                )
+            })
         }.let(callback::onImagePickerResult)
         finish()
     }

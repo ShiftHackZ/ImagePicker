@@ -33,6 +33,7 @@ internal class GalleryMultiPickerNativeActivity : ImagePickerActivity() {
                 getImagePathFromInputStreamUri(this, clipData.getItemAt(i).uri)
                     ?.let(::File)
                     ?.takeIf(File::exists)
+                    ?.applyConditionalRotation()
                     ?.let { file -> PickedImage(PickedSource.GALLERY_MULTIPLE, file) }
                     ?.let(output::add)
             }
@@ -46,6 +47,8 @@ internal class GalleryMultiPickerNativeActivity : ImagePickerActivity() {
             (it as? Uri)?.let { uri ->
                 getNormalizedUri(this, uri)?.path
                     ?.let(::File)
+                    ?.takeIf(File::exists)
+                    ?.applyConditionalRotation()
                     ?.let { file -> PickedImage(PickedSource.GALLERY_MULTIPLE, file) }
                     ?.let(output::add)
             }

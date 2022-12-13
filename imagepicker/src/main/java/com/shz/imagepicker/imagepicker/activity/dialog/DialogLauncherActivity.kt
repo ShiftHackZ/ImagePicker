@@ -44,6 +44,7 @@ internal class DialogLauncherActivity : AppCompatActivity(), ImagePickerDialog.L
             callback = callback,
             delegate = loadDelegate,
             multipleSelection = payload?.multipleSelection ?: false,
+            autoRotate = payload?.autoRotate ?: false,
             galleryPicker = payload?.galleryPicker ?: GalleryPicker.NATIVE,
             minimum = payload?.minimum ?: 1,
             maximum = payload?.maximum ?: 10,
@@ -58,6 +59,7 @@ internal class DialogLauncherActivity : AppCompatActivity(), ImagePickerDialog.L
     data class Payload(
         val authority: String,
         val multipleSelection: Boolean,
+        val autoRotate: Boolean,
         val minimum: Int,
         val maximum: Int,
         val galleryPicker: GalleryPicker,

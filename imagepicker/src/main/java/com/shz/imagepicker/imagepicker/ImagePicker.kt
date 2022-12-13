@@ -23,6 +23,7 @@ class ImagePicker private constructor(
     private val callback: ImagePickerCallback,
     private val useCamera: Boolean,
     private val useGallery: Boolean,
+    private val autoRotate: Boolean,
     private val multipleSelection: Boolean,
     private val minimumSelectionCount: Int,
     private val maximumSelectionCount: Int,
@@ -48,21 +49,23 @@ class ImagePicker private constructor(
         when {
             useCamera && !useGallery -> launchCameraPicker(authority, callback)
             !useCamera && useGallery -> launchGalleryPicker(
-                callback,
-                loadDelegate,
-                multipleSelection,
-                minimumSelectionCount,
-                maximumSelectionCount,
-                galleryPicker
+                callback = callback,
+                delegate = loadDelegate,
+                multipleSelection = multipleSelection,
+                autoRotate = autoRotate,
+                minimum = minimumSelectionCount,
+                maximum = maximumSelectionCount,
+                galleryPicker = galleryPicker,
             )
             useCamera && useGallery -> launchDialog(
-                authority,
-                callback,
-                loadDelegate,
-                multipleSelection,
-                minimumSelectionCount,
-                maximumSelectionCount,
-                galleryPicker
+                authority = authority,
+                callback = callback,
+                delegate = loadDelegate,
+                multipleSelection = multipleSelection,
+                autoRotate = autoRotate,
+                minimum = minimumSelectionCount,
+                maximum = maximumSelectionCount,
+                galleryPicker = galleryPicker,
             )
             else -> deliverThrowable(callback, NothingToLaunchException())
         }
@@ -82,6 +85,7 @@ class ImagePicker private constructor(
     ) {
         private var useCamera: Boolean = false
         private var useGallery: Boolean = false
+        private var autoRotate: Boolean = false
         private var multipleSelection: Boolean = false
         private var minimumSelectionCount: Int = 1
         private var maximumSelectionCount: Int = Int.MAX_VALUE
@@ -104,15 +108,16 @@ class ImagePicker private constructor(
                 "Parameter maximumSelectionCount must be bigger than minimumSelectionCount"
             }
             return ImagePicker(
-                authority,
-                callback,
-                useCamera,
-                useGallery,
-                multipleSelection,
-                minimumSelectionCount,
-                maximumSelectionCount,
-                galleryPicker,
-                loadDelegate,
+                authority = authority,
+                callback = callback,
+                useCamera = useCamera,
+                useGallery = useGallery,
+                autoRotate = autoRotate,
+                multipleSelection = multipleSelection,
+                minimumSelectionCount = minimumSelectionCount,
+                maximumSelectionCount = maximumSelectionCount,
+                galleryPicker = galleryPicker,
+                loadDelegate = loadDelegate,
             )
         }
 
@@ -136,6 +141,18 @@ class ImagePicker private constructor(
          */
         fun useGallery(useGallery: Boolean = true) = apply {
             this.useGallery = useGallery
+        }
+
+        /**
+         * Configures if Gallery Picker is allowed to auto rotate images with wrong EXIF rotation.
+         * If parameter is set to true, ImagePicker will re-write the original file with rotated one.
+         *
+         * @param autoRotate if true will allow auto rotate on any Gallery Picker.
+         *
+         * @return [ImagePicker.Builder]
+         */
+        fun autoRotate(autoRotate: Boolean = false) = apply {
+            this.autoRotate = autoRotate
         }
 
         /**
@@ -201,7 +218,6 @@ class ImagePicker private constructor(
         }
 
         companion object {
-
             /**
              * Must be called after desired parameters were passed to receive [ImagePicker] instance.
              *

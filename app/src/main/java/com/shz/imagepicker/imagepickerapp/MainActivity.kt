@@ -34,18 +34,21 @@ class MainActivity : AppCompatActivity(), ImagePickerCallback {
 
         binding.btnCamera.setOnClickListener {
             imagePicker
+                .autoRotate(binding.switchAutoRotate.isChecked)
                 .useCamera()
                 .build()
                 .launch(this)
         }
         binding.btnGallery.setOnClickListener {
             imagePicker
+                .autoRotate(binding.switchAutoRotate.isChecked)
                 .useGallery()
                 .build()
                 .launch(this)
         }
         binding.btnGalCustomSingle.setOnClickListener {
             imagePicker
+                .autoRotate(binding.switchAutoRotate.isChecked)
                 .useGallery()
                 .galleryPicker(GalleryPicker.CUSTOM)
                 .loadDelegate { imageView, file ->
@@ -58,19 +61,22 @@ class MainActivity : AppCompatActivity(), ImagePickerCallback {
         }
         binding.btnGalCustomMultiple.setOnClickListener {
             imagePicker
+                .autoRotate(binding.switchAutoRotate.isChecked)
                 .useGallery()
                 .multipleSelection()
                 .galleryPicker(GalleryPicker.CUSTOM)
                 .loadDelegate { imageView, file ->
-//                    Glide.with(this)
-//                        .load(file)
-//                        .into(imageView)
+                    Glide.with(this)
+                        .load(file)
+                        .into(imageView)
                 }
                 .build()
                 .launch(this)
         }
         binding.btnDialog.setOnClickListener {
-            imagePicker.useGallery()
+            imagePicker
+                .autoRotate(binding.switchAutoRotate.isChecked)
+                .useGallery()
                 .useCamera()
                 .multipleSelection()
                 .galleryPicker(GalleryPicker.NATIVE)

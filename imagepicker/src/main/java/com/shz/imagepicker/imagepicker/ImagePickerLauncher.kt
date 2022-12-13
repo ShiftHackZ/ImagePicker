@@ -7,6 +7,7 @@ import com.shz.imagepicker.imagepicker.activity.customgallery.GalleryPickerCusto
 import com.shz.imagepicker.imagepicker.activity.dialog.DialogLauncherActivity
 import com.shz.imagepicker.imagepicker.activity.nativegallery.GalleryMultiPickerNativeActivity
 import com.shz.imagepicker.imagepicker.activity.nativegallery.GallerySinglePickerActivity
+import com.shz.imagepicker.imagepicker.core.ImagePickerActivity
 import com.shz.imagepicker.imagepicker.model.GalleryPicker
 
 internal class ImagePickerLauncher(private val context: Context) {
@@ -25,6 +26,7 @@ internal class ImagePickerLauncher(private val context: Context) {
         callback: ImagePickerCallback,
         delegate: ImagePickerLoadDelegate,
         multipleSelection: Boolean,
+        autoRotate: Boolean,
         minimum: Int,
         maximum: Int,
         galleryPicker: GalleryPicker,
@@ -32,17 +34,18 @@ internal class ImagePickerLauncher(private val context: Context) {
         ImagePicker.debugLog("[Launcher] launchGalleryPicker")
         when (galleryPicker) {
             GalleryPicker.NATIVE -> if (multipleSelection) {
-                launchMultipleSelectionGalleryNative(callback)
+                launchMultipleSelectionGalleryNative(callback, autoRotate)
             } else {
-                launchSingleSelectionGallery(callback)
+                launchSingleSelectionGallery(callback, autoRotate)
             }
             GalleryPicker.CUSTOM -> {
                 launchMultipleSelectionGalleryCustom(
-                    callback,
-                    delegate,
-                    multipleSelection,
-                    minimum,
-                    maximum
+                    callback = callback,
+                    delegate = delegate,
+                    multipleSelection = multipleSelection,
+                    autoRotate = autoRotate,
+                    min = minimum,
+                    max = maximum
                 )
             }
         }
@@ -53,6 +56,7 @@ internal class ImagePickerLauncher(private val context: Context) {
         callback: ImagePickerCallback,
         delegate: ImagePickerLoadDelegate,
         multipleSelection: Boolean,
+        autoRotate: Boolean,
         minimum: Int,
         maximum: Int,
         galleryPicker: GalleryPicker,
@@ -66,6 +70,7 @@ internal class ImagePickerLauncher(private val context: Context) {
                 DialogLauncherActivity.Payload(
                     authority,
                     multipleSelection,
+                    autoRotate,
                     minimum,
                     maximum,
                     galleryPicker,
@@ -74,22 +79,33 @@ internal class ImagePickerLauncher(private val context: Context) {
         })
     }
 
-    private fun launchSingleSelectionGallery(callback: ImagePickerCallback) {
+    private fun launchSingleSelectionGallery(
+        callback: ImagePickerCallback,
+        autoRotate: Boolean,
+    ) {
         ImagePicker.debugLog("[Launcher] launchSingleSelectionGallery")
         GallerySinglePickerActivity.callback = callback
-        context.startActivity(Intent(context, GallerySinglePickerActivity::class.java))
+        context.startActivity(Intent(context, GallerySinglePickerActivity::class.java).apply {
+            putExtra(ImagePickerActivity.BUNDLE_AUTO_ROTATE, autoRotate)
+        })
     }
 
-    private fun launchMultipleSelectionGalleryNative(callback: ImagePickerCallback) {
+    private fun launchMultipleSelectionGalleryNative(
+        callback: ImagePickerCallback,
+        autoRotate: Boolean,
+    ) {
         ImagePicker.debugLog("[Launcher] launchMultipleSelectionGalleryNative")
         GalleryMultiPickerNativeActivity.callback = callback
-        context.startActivity(Intent(context, GalleryMultiPickerNativeActivity::class.java))
+        context.startActivity(Intent(context, GalleryMultiPickerNativeActivity::class.java).apply {
+            putExtra(ImagePickerActivity.BUNDLE_AUTO_ROTATE, autoRotate)
+        })
     }
 
     private fun launchMultipleSelectionGalleryCustom(
         callback: ImagePickerCallback,
         delegate: ImagePickerLoadDelegate,
         multipleSelection: Boolean,
+        autoRotate: Boolean,
         min: Int,
         max: Int,
     ) {
@@ -97,6 +113,7 @@ internal class ImagePickerLauncher(private val context: Context) {
         GalleryPickerCustomActivity.loadDelegate = delegate
         GalleryPickerCustomActivity.callback = callback
         context.startActivity(Intent(context, GalleryPickerCustomActivity::class.java).apply {
+            putExtra(ImagePickerActivity.BUNDLE_AUTO_ROTATE, autoRotate)
             putExtra(GalleryPickerCustomActivity.BUNDLE_MULTI_SELECTION, multipleSelection)
             putExtra(GalleryPickerCustomActivity.BUNDLE_MINIMUM, min)
             putExtra(GalleryPickerCustomActivity.BUNDLE_MAXIMUM, max)
