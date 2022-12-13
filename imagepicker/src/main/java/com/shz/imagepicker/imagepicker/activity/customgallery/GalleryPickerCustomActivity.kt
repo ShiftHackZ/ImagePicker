@@ -1,5 +1,6 @@
 package com.shz.imagepicker.imagepicker.activity.customgallery
 
+import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -14,6 +15,7 @@ import com.shz.imagepicker.imagepicker.activity.customgallery.adapter.multiple.G
 import com.shz.imagepicker.imagepicker.activity.customgallery.adapter.single.GalleryImagesSingleAdapter
 import com.shz.imagepicker.imagepicker.core.ImagePickerActivity
 import com.shz.imagepicker.imagepicker.defaultImagePickerLoadDelegate
+import com.shz.imagepicker.imagepicker.exception.FeatureNotSupportedException
 import com.shz.imagepicker.imagepicker.model.PickedImage
 import com.shz.imagepicker.imagepicker.model.PickedResult
 import com.shz.imagepicker.imagepicker.model.PickedSource
@@ -21,6 +23,7 @@ import com.shz.imagepicker.imagepicker.utils.checkGalleryNativePermission
 import com.shz.imagepicker.imagepicker.utils.getAllImages
 import java.io.File
 
+@Deprecated("GalleryPicker.CUSTOM is deprecated from Android 13 (SDK 33)")
 internal class GalleryPickerCustomActivity : ImagePickerActivity() {
 
     override val requestCode: Int = 54503
@@ -31,6 +34,15 @@ internal class GalleryPickerCustomActivity : ImagePickerActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= 33) {
+            val message = "This feature is not supported from Android 13 (SDK 33) due to Android restrictions\n" +
+                    "Reference: https://developer.android.com/training/data-storage/shared/media#storage-permission"
+            ImagePicker.deliverThrowable(
+                callback,
+                FeatureNotSupportedException(message),
+            )
+            finish()
+        }
         setContentView(R.layout.image_picker_activity_gallery_custom)
 
         multipleSelection = intent.getBooleanExtra(BUNDLE_MULTI_SELECTION, false)

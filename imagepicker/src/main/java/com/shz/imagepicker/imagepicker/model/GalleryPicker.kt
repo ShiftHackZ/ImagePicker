@@ -22,5 +22,6 @@ enum class GalleryPicker : Serializable {
      *
      * Advice: Use this mainly when you need to support multiple images selection on custom ROMs.
      */
+    @Deprecated("GalleryPicker.CUSTOM is deprecated from Android 13 (SDK 33)")
     CUSTOM;
 }

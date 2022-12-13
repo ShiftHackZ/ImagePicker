@@ -69,7 +69,7 @@ internal class GalleryMultiPickerNativeActivity : ImagePickerActivity() {
                 putExtra(SAMSUNG_MULTI_PICK, true);
                 setDataAndType(
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    GALLERY_IMAGE_MIME
+                    GALLERY_IMAGE_MIME,
                 )
             }
         )

@@ -101,6 +101,7 @@ internal class ImagePickerLauncher(private val context: Context) {
         })
     }
 
+    @Deprecated("GalleryPicker.CUSTOM is deprecated from Android 13 (SDK 33)")
     private fun launchMultipleSelectionGalleryCustom(
         callback: ImagePickerCallback,
         delegate: ImagePickerLoadDelegate,

@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity(), ImagePickerCallback {
             imagePicker
                 .autoRotate(binding.switchAutoRotate.isChecked)
                 .useGallery()
+//                .multipleSelection(true)
                 .build()
                 .launch(this)
         }
