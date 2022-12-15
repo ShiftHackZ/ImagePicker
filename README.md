@@ -12,8 +12,12 @@ Android library that can be used as quick solution to ImagePicker feature implem
 - Custom gallery picker, supports multiple selection (for old non-AOSP Android ROMs that does not support multiple selection intent)
 
 ## Translations
-- English: 100%
-- Ukrainian: 100%
+
+| Language  | Translation Coverage |
+|-----------|----------------------|
+| English   | 100%                 |
+| Hebrew    | 100%                 |
+| Ukrainian | 100%                 |
 
 ## Implementation
 

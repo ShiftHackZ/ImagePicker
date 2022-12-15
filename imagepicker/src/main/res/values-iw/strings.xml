@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="image_picker_dialog_camera">מַצלֵמָה</string>
+    <string name="image_picker_dialog_gallery">גלריה</string>
+    <string name="image_picker_gallery_title_single">בחר תמונה</string>
+    <string name="image_picker_gallery_title_multiple">בחר תמונות</string>
+    <string name="image_picker_gallery_action_select">בחר</string>
+    <string name="image_picker_gallery_title_selected">נבחר:</string>
+</resources>
