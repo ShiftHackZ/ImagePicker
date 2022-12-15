@@ -105,6 +105,10 @@ val imagePicker = ImagePicker.Builder(this.packageName + ".provider", this)
 imagePicker.launch(context)
 ```
 
+## Screenshots
+
+<img width="300" src="https://github.com/ShiftHackZ/ImagePicker/raw/master/docs/assets/screenshot_1.png" /><img width="300" src="https://github.com/ShiftHackZ/ImagePicker/raw/master/docs/assets/screenshot_2.png" /><img width="300" src="https://github.com/ShiftHackZ/ImagePicker/raw/master/docs/assets/screenshot_3.png" />
+
 ## Credits
 - Developer: Dmitriy Moroz 
 - E-Mail: dmitriy@moroz.cc
