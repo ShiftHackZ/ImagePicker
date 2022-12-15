@@ -19,7 +19,7 @@
             android:theme="@style/ImagePicker.Theme.Transparent" />
         <activity
             android:name=".activity.dialog.DialogLauncherActivity"
-            android:theme="@style/ImagePicker.Theme.Transparent" />
+            android:theme="@style/ImagePicker.Theme.Dialog" />
         <activity
             android:name=".activity.customgallery.GalleryPickerCustomActivity" />
     </application>
