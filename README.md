@@ -90,6 +90,7 @@ class MainActivity : AppCompatActivity(), ImagePickerCallback {
 val imagePicker = ImagePicker.Builder(this.packageName + ".provider", this)
     .useGallery(true)                           // Use gallery picker if true
     .useCamera(true)                            // Use camera picker if true
+    .autoRotate(true)                           // Returns 0 degress rotated images, instead of exif-rotated images if true
     .multipleSelection()                        // Allow multiple selection in gallery picker
     .minimumSelectionCount(2)                   // Defines min count of GallerySelector.CUSTOM multiple selection gallery picker
     .maximumSelectionCount(3)                   // Defines max count of GallerySelector.CUSTOM multiple selection gallery picker
