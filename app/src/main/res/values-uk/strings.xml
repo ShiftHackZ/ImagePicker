@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ImagePicker Android Library</string>
+    <string name="setting_multiple_selection">Режим мульти-вибору</string>
+    <string name="setting_auto_rotate">Авто-поворот зображень</string>
+    <string name="action_native_camera">КАМЕРА</string>
+    <string name="action_native_gallery">ГАЛЕРЕЯ</string>
+    <string name="action_custom_gallery">Кастомна Галерея</string>
+    <string name="action_launch_interactive_dialog">UX Діалог</string>
+    <string name="action_error">Помилка</string>
+    <string name="action_ok">Зрозуміло</string>
+</resources>

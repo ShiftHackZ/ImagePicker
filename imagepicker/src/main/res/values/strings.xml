@@ -1,10 +1,8 @@
 <resources>
     <string name="image_picker_dialog_camera">Camera</string>
     <string name="image_picker_dialog_gallery">Gallery</string>
-
     <string name="image_picker_gallery_title_single">Select image</string>
     <string name="image_picker_gallery_title_multiple">Select images</string>
-
     <string name="image_picker_gallery_action_select">Select</string>
     <string name="image_picker_gallery_title_selected">Selected: </string>
 </resources>

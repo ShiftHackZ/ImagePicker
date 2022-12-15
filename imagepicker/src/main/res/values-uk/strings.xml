@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="image_picker_dialog_camera">Камера</string>
+    <string name="image_picker_dialog_gallery">Галерея</string>
+    <string name="image_picker_gallery_title_single">Оберіть зображення</string>
+    <string name="image_picker_gallery_title_multiple">Оберіть зображення</string>
+    <string name="image_picker_gallery_action_select">Обрати</string>
+    <string name="image_picker_gallery_title_selected">Виділено:</string>
+</resources>
