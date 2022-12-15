@@ -55,7 +55,21 @@ dependencies {
 </provider>
 ```
 
-5. In order to receive images, implement `ImagePickerCallback` in your Fragment/Activity or as object:
+5. Add required permissions
+
+```xml
+<uses-permission android:name="android.permission.CAMERA" />
+<uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+<uses-permission
+    android:name="android.permission.READ_EXTERNAL_STORAGE"
+    android:maxSdkVersion="32" />
+<uses-permission
+    android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    android:maxSdkVersion="29" />
+
+```
+
+6. In order to receive images, implement `ImagePickerCallback` in your Fragment/Activity or as object:
 
 ```kotlin
 class MainActivity : AppCompatActivity(), ImagePickerCallback {
@@ -84,7 +98,7 @@ class MainActivity : AppCompatActivity(), ImagePickerCallback {
 }
 ```
 
-6. Create an instance of ImagePicker using ImagePicker.Builder(), which require 2 mandatory params: current Activity and ImagePickerCallback:
+7. Create an instance of ImagePicker using ImagePicker.Builder(), which require 2 mandatory params: current Activity and ImagePickerCallback:
 
 ```kotlin
 val imagePicker = ImagePicker.Builder(this.packageName + ".provider", this)
@@ -99,7 +113,7 @@ val imagePicker = ImagePicker.Builder(this.packageName + ".provider", this)
 ```
 
 
-7. Finally, launch your ImagePicker:
+8. Finally, launch your ImagePicker:
 
 ```kotlin
 imagePicker.launch(context)
