@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ImagePicker Android Library</string>
+    <string name="app_name" translatable="false">ImagePicker Android Library</string>
     <string name="setting_multiple_selection">Multiple selection</string>
     <string name="setting_auto_rotate">Auto rotate images</string>
     <string name="action_native_camera">CAMERA</string>
