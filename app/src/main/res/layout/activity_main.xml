@@ -9,16 +9,16 @@
         android:layout_height="match_parent">
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv"
+            android:id="@+id/recycler_images"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/linear"
+            app:layout_constraintBottom_toTopOf="@+id/container_actions"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
-            android:id="@+id/linear"
+            android:id="@+id/container_actions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -26,6 +26,48 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
+
+            <LinearLayout
+                android:id="@+id/section_multiple_selection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switch_multiple_selection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:switchPadding="8dp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:text="@string/setting_multiple_selection" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/section_auto_rotate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/switch_auto_rotate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:switchPadding="8dp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:text="@string/setting_auto_rotate" />
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -45,7 +87,7 @@
                     android:focusable="true"
                     android:gravity="center"
                     android:padding="8dp"
-                    android:text="CAMERA"
+                    android:text="@string/action_native_camera"
                     android:textColor="#FFFFFF"
                     android:textSize="16sp" />
 
@@ -62,7 +104,7 @@
                     android:focusable="true"
                     android:gravity="center"
                     android:padding="8dp"
-                    android:text="GALLERY"
+                    android:text="@string/action_native_gallery"
                     android:textColor="#FFFFFF"
                     android:textSize="16sp" />
 
@@ -86,12 +128,12 @@
                     android:focusable="true"
                     android:gravity="center"
                     android:padding="8dp"
-                    android:text="Custom single gallery"
+                    android:text="@string/action_custom_gallery"
                     android:textColor="#FFFFFF"
                     android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/btn_gal_custom_multiple"
+                    android:id="@+id/btn_dialog"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="2dp"
@@ -99,41 +141,15 @@
                     android:layout_weight="1"
                     android:background="#E16666"
                     android:clickable="true"
-                    android:drawableTop="@drawable/ic_custom"
+                    android:drawableTop="@drawable/ic_list"
                     android:focusable="true"
                     android:gravity="center"
                     android:padding="8dp"
-                    android:text="Custom multi gallery"
+                    android:text="@string/action_launch_interactive_dialog"
                     android:textColor="#FFFFFF"
                     android:textSize="16sp" />
 
             </LinearLayout>
-
-            <TextView
-                android:id="@+id/btn_dialog"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="2dp"
-                android:layout_marginVertical="2dp"
-                android:layout_weight="1"
-                android:background="#E16666"
-                android:clickable="true"
-                android:drawableStart="@drawable/ic_list"
-                android:drawableLeft="@drawable/ic_list"
-                android:focusable="true"
-                android:gravity="center"
-                android:padding="8dp"
-                android:text="Launch interactive dialog"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp" />
-
-            <androidx.appcompat.widget.SwitchCompat
-                android:id="@+id/switch_auto_rotate"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layoutDirection="rtl"
-                app:switchPadding="8dp"
-                android:text="Auto rotate images" />
         </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

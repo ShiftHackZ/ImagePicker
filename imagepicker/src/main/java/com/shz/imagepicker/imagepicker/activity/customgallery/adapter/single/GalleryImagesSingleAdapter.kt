@@ -1,6 +1,5 @@
 package com.shz.imagepicker.imagepicker.activity.customgallery.adapter.single
 
-import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup

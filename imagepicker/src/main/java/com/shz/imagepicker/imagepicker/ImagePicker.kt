@@ -30,7 +30,6 @@ class ImagePicker private constructor(
     private val galleryPicker: GalleryPicker,
     private val loadDelegate: ImagePickerLoadDelegate,
 ) {
-
     /**
      * Checks for access Camera or Media permissions, then
      * launches **ImagePicker** according to defined configuration.
@@ -175,7 +174,6 @@ class ImagePicker private constructor(
          *
          * @return [ImagePicker.Builder]
          */
-        @Deprecated("GalleryPicker.CUSTOM is deprecated from Android 13 (SDK 33)")
         fun minimumSelectionCount(minimumSelectionCount: Int) = apply {
             this.minimumSelectionCount = minimumSelectionCount
         }
@@ -189,7 +187,6 @@ class ImagePicker private constructor(
          *
          * @return [ImagePicker.Builder]
          */
-        @Deprecated("GalleryPicker.CUSTOM is deprecated from Android 13 (SDK 33)")
         fun maximumSelectionCount(maximumSelectionCount: Int) = apply {
             this.maximumSelectionCount = maximumSelectionCount
         }
@@ -211,12 +208,10 @@ class ImagePicker private constructor(
             this.galleryPicker = galleryPicker
         }
 
-        @Deprecated("GalleryPicker.CUSTOM is deprecated from Android 13 (SDK 33)")
         fun loadDelegate(loadDelegate: ImagePickerLoadDelegate) = apply {
             this.loadDelegate = loadDelegate
         }
 
-        @Deprecated("GalleryPicker.CUSTOM is deprecated from Android 13 (SDK 33)")
         fun loadDelegate(loadDelegate: (ImageView, File) -> Unit) = apply {
             this.loadDelegate = ImagePickerLoadDelegate { iv, file -> loadDelegate(iv, file) }
         }

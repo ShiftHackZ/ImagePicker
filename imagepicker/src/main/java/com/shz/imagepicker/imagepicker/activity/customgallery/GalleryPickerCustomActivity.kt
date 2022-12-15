@@ -88,8 +88,10 @@ internal class GalleryPickerCustomActivity : ImagePickerActivity() {
                         submitList(files)
                     }
                 } else {
-                    GalleryImagesMultipleAdapter(ArrayList(files), max) { selectedFiles ->
+                    GalleryImagesMultipleAdapter(loadDelegate, max) { selectedFiles ->
                         onSelectionChanged(selectedFiles.size)
+                    }.apply {
+                        submit(files)
                     }
                 }
             }
