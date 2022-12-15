@@ -11,6 +11,10 @@ Android library that can be used as quick solution to ImagePicker feature implem
 - Gallery multiple photo picker
 - Custom gallery picker, supports multiple selection (for old non-AOSP Android ROMs that does not support multiple selection intent)
 
+## Translations
+- English: 100%
+- Ukrainian: 100%
+
 ## Implementation
 
 1. In project-level gradle add new maven repository:
