@@ -1,0 +1,10 @@
+<resources>
+    <string name="setting_multiple_selection">בחירה מרובה</string>
+    <string name="setting_auto_rotate">סיבוב אוטומטי של תמונות</string>
+    <string name="action_native_camera">מַצלֵמָה</string>
+    <string name="action_native_gallery">גלריה</string>
+    <string name="action_custom_gallery">גלריה מותאמת אישית</string>
+    <string name="action_launch_interactive_dialog">דיאלוג אינטראקטיבי</string>
+    <string name="action_error">שְׁגִיאָה</string>
+    <string name="action_ok">בסדר</string>
+</resources>
