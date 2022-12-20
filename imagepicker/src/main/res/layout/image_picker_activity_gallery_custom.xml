@@ -17,8 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
         android:layout_gravity="bottom"
-        android:alpha="0.76"
-        android:background="@android:color/white"
+        android:background="@color/image_picker_custom_gallery_bottom_bar_color"
         android:visibility="gone"
         tools:visibility="visible" />
 
@@ -66,6 +65,5 @@
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:text="@string/image_picker_gallery_action_select" />
-
     </FrameLayout>
 </FrameLayout>
