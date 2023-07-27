@@ -38,26 +38,28 @@ internal class CameraPickerActivity : ImagePickerActivity() {
     }
 
     override fun startPicker() {
-        val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        filename = System.nanoTime().toString()
-        val uri = getCaptureImageOutputUri(this, filename)
-        if (filename.isNotEmpty()) uri?.path?.let { path ->
-            val file = File(path)
-            if (Build.VERSION.SDK_INT >= 24) {
-                cameraIntent.putExtra(
-                    MediaStore.EXTRA_OUTPUT,
-                    FileProvider.getUriForFile(
-                        this,
-                        authority,
-                        file,
+        if (!authority.isEmpty()) {
+            val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            filename = System.nanoTime().toString()
+            val uri = getCaptureImageOutputUri(this, filename)
+            if (filename.isNotEmpty()) uri?.path?.let { path ->
+                val file = File(path)
+                if (Build.VERSION.SDK_INT >= 24) {
+                    cameraIntent.putExtra(
+                        MediaStore.EXTRA_OUTPUT,
+                        FileProvider.getUriForFile(
+                            this,
+                            authority,
+                            file,
+                        )
                     )
-                )
-                cameraIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-                cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            } else {
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
+                    cameraIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+                    cameraIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                } else {
+                    cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri)
+                }
+                launcher.launch(cameraIntent)
             }
-            launcher.launch(cameraIntent)
         }
     }
 
