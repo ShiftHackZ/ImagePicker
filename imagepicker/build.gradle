@@ -50,8 +50,6 @@ afterEvaluate {
                 groupId libraryGroupId
                 version libraryVersion
                 artifactId libraryArtifactId
-
-                artifact("$buildDir/outputs/aar/${artifactId}-release.aar")
             }
         }
     }
