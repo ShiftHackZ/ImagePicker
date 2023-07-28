@@ -41,7 +41,7 @@ internal class CameraPickerActivity : ImagePickerActivity() {
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         filename = System.nanoTime().toString()
         val uri = getCaptureImageOutputUri(this, filename)
-        if (filename.isNotEmpty()) uri?.path?.let { path ->
+        if (filename.isNotEmpty() && authority.isNotEmpty()) uri?.path?.let { path ->
             val file = File(path)
             if (Build.VERSION.SDK_INT >= 24) {
                 cameraIntent.putExtra(
